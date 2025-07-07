@@ -1,12 +1,15 @@
+@import '@fontsource/press-start-2p';
+
 :root {
-  --primary-color: #1E88E5;
-  --secondary-color: #43A047;
-  --accent-color: #FDD835;
-  --bg-color: #ffffff;
-  --text-color: #333333;
-  --border-color: #e0e0e0;
-  --snake-color: var(--secondary-color);
-  --food-color: var(--accent-color);
+  --primary-color: #00ff00;
+  --secondary-color: #ff00ff;
+  --accent-color: #ffff00;
+  --bg-color: #000000;
+  --text-color: #00ff00;
+  --border-color: #00ff00;
+  --snake-color: #00ff00;
+  --food-color: #ff0000;
+  --grid-color: rgba(0, 255, 0, 0.2);
 }
 
 .App {
@@ -17,6 +20,7 @@
   align-items: center;
   background-color: var(--bg-color);
   color: var(--text-color);
+  font-family: 'Press Start 2P', cursive;
 }
 
 .game {
@@ -25,24 +29,54 @@
   align-items: center;
   gap: 20px;
   padding: 20px;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 255, 0, 0.05) 0px,
+    rgba(0, 255, 0, 0.05) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  border: 4px solid var(--text-color);
+  box-shadow: 0 0 10px var(--text-color),
+              inset 0 0 10px var(--text-color);
 }
 
 h1 {
-  color: var(--primary-color);
+  color: var(--text-color);
   margin-bottom: 20px;
+  text-shadow: 2px 2px var(--secondary-color),
+               4px 4px rgba(255, 0, 255, 0.5);
+  animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px var(--text-color),
+                 0 0 10px var(--text-color),
+                 0 0 15px var(--primary-color);
+  }
+  to {
+    text-shadow: 0 0 10px var(--text-color),
+                 0 0 20px var(--text-color),
+                 0 0 30px var(--primary-color);
+  }
 }
 
 .game-status {
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-bottom: 20px;
-  color: var(--secondary-color);
-  font-weight: bold;
+  color: var(--accent-color);
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 .board {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  padding: 10px;
+  background-color: rgba(0, 255, 0, 0.1);
+  border: 4px solid var(--text-color);
+  box-shadow: 0 0 10px var(--text-color);
 }
 
 .board-row {
@@ -53,22 +87,27 @@ h1 {
 .square {
   width: 80px;
   height: 80px;
-  background: white;
-  border: 2px solid var(--primary-color);
-  border-radius: 8px;
-  font-size: 2.5rem;
+  background: var(--bg-color);
+  border: 4px solid var(--text-color);
+  font-size: 2rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s;
   color: var(--text-color);
+  text-shadow: 0 0 5px var(--text-color);
+  font-family: 'Press Start 2P', cursive;
+  position: relative;
+  overflow: hidden;
 }
 
 .square:hover:not(:disabled) {
-  background-color: rgba(30, 136, 229, 0.1);
+  background-color: rgba(0, 255, 0, 0.2);
+  transform: scale(1.05);
 }
 
 .square:disabled {
   cursor: not-allowed;
+  opacity: 0.8;
 }
 
 .game-controls {
@@ -83,37 +122,31 @@ h1 {
   gap: 10px;
 }
 
-.mode-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: var(--primary-color);
-  color: white;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.mode-button:hover {
-  opacity: 0.9;
-}
-
-.mode-button.active {
-  background-color: var(--secondary-color);
-}
-
-.reset-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: var(--accent-color);
+.mode-button, .reset-button, .pause-button {
+  padding: 15px 20px;
+  border: 3px solid var(--text-color);
+  background-color: var(--bg-color);
   color: var(--text-color);
   cursor: pointer;
   transition: all 0.2s;
-  font-weight: bold;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
 }
 
-.reset-button:hover {
-  opacity: 0.9;
+.mode-button:hover, .reset-button:hover, .pause-button:hover {
+  background-color: var(--text-color);
+  color: var(--bg-color);
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px var(--text-color);
+}
+
+.mode-button.active {
+  background-color: var(--text-color);
+  color: var(--bg-color);
+  box-shadow: 0 0 15px var(--text-color);
 }
 
 /* Snake Game Styles */
@@ -127,35 +160,42 @@ h1 {
 .snake-board {
   position: relative;
   background-color: var(--bg-color);
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
+  border: 4px solid var(--text-color);
+  box-shadow: 0 0 10px var(--text-color);
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
 .snake-segment {
   position: absolute;
   background-color: var(--snake-color);
-  border-radius: 4px;
+  border-radius: 0;
+  box-shadow: 0 0 5px var(--snake-color);
 }
 
 .food {
   position: absolute;
   background-color: var(--food-color);
-  border-radius: 50%;
+  border-radius: 0;
+  box-shadow: 0 0 5px var(--food-color);
+  animation: blink 1s infinite;
 }
 
-.game-status {
-  display: flex;
-  gap: 20px;
-  font-size: 1.2rem;
-  font-weight: bold;
+@keyframes blink {
+  50% { opacity: 0.7; }
 }
 
 .game-over {
-  color: #f44336;
+  color: #ff0000;
+  text-shadow: 0 0 10px #ff0000;
+  animation: blink 1s infinite;
 }
 
 .paused {
   color: var(--accent-color);
+  text-shadow: 0 0 10px var(--accent-color);
 }
 
 .controls {
@@ -163,22 +203,14 @@ h1 {
   gap: 10px;
 }
 
-.pause-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: var(--accent-color);
-  color: var(--text-color);
-  cursor: pointer;
-  transition: all 0.2s;
-  font-weight: bold;
-}
-
 .instructions {
   text-align: center;
   color: var(--text-color);
   opacity: 0.8;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
+  margin-top: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 /* Game Selection Styles */
@@ -189,24 +221,28 @@ h1 {
 }
 
 .game-selector button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: var(--primary-color);
-  color: white;
+  padding: 15px 20px;
+  border: 3px solid var(--text-color);
+  background-color: var(--bg-color);
+  color: var(--text-color);
   cursor: pointer;
   transition: all 0.2s;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.8rem;
+  text-transform: uppercase;
 }
 
 .game-selector button.active {
-  background-color: var(--secondary-color);
+  background-color: var(--text-color);
+  color: var(--bg-color);
+  box-shadow: 0 0 15px var(--text-color);
 }
 
 @media (max-width: 480px) {
   .square {
     width: 60px;
     height: 60px;
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
   
   .mode-selection {
@@ -220,5 +256,10 @@ h1 {
 
   .game-selector {
     flex-direction: column;
+  }
+
+  .mode-button, .reset-button, .pause-button, .game-selector button {
+    font-size: 0.6rem;
+    padding: 10px 15px;
   }
 }

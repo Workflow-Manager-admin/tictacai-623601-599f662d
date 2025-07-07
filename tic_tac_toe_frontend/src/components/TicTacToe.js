@@ -9,6 +9,14 @@ const TicTacToe = () => {
   const [xIsNext, setXIsNext] = useState(true);
   const [gameMode, setGameMode] = useState('pvp');
   const [winner, setWinner] = useState(null);
+  const [showTitle, setShowTitle] = useState(true);
+
+  useEffect(() => {
+    if (showTitle) {
+      const timer = setTimeout(() => setShowTitle(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [showTitle]);
 
   useEffect(() => {
     if (!xIsNext && gameMode === 'ai' && !winner) {
@@ -38,6 +46,7 @@ const TicTacToe = () => {
     setSquares(Array(9).fill(null));
     setXIsNext(true);
     setWinner(null);
+    setShowTitle(true);
   };
 
   const handleModeSelect = (mode) => {
@@ -47,16 +56,28 @@ const TicTacToe = () => {
 
   const getStatus = () => {
     if (winner) {
-      return `Winner: ${winner}`;
+      return `WINNER: ${winner}`;
     } else if (isBoardFull(squares)) {
-      return "Game Draw!";
+      return "DRAW!";
     } else {
-      return `Next player: ${xIsNext ? 'X' : 'O'}`;
+      return `NEXT: ${xIsNext ? 'X' : 'O'}`;
     }
   };
 
   return (
     <div className="game">
+      {showTitle && (
+        <div className="game-title" style={{
+          position: 'absolute',
+          zIndex: 1,
+          fontSize: '2rem',
+          color: '#00ff00',
+          textShadow: '0 0 10px #00ff00',
+          animation: 'glow 1.5s ease-in-out infinite alternate'
+        }}>
+          TIC TAC TOE
+        </div>
+      )}
       <div className="game-status">{getStatus()}</div>
       <Board squares={squares} onClick={handleClick} />
       <GameControls 

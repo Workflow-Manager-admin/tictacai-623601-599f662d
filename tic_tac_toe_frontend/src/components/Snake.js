@@ -14,6 +14,14 @@ const Snake = () => {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [showTitle, setShowTitle] = useState(true);
+
+  useEffect(() => {
+    if (showTitle) {
+      const timer = setTimeout(() => setShowTitle(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [showTitle]);
 
   const generateFood = useCallback(() => {
     const newFood = {
@@ -30,6 +38,7 @@ const Snake = () => {
     setGameOver(false);
     setScore(0);
     setIsPaused(false);
+    setShowTitle(true);
   };
 
   const moveSnake = useCallback(() => {
@@ -47,14 +56,12 @@ const Snake = () => {
         default: break;
       }
 
-      // Check wall collision
       if (newHead.x < 0 || newHead.x >= GRID_SIZE || 
           newHead.y < 0 || newHead.y >= GRID_SIZE) {
         setGameOver(true);
         return currentSnake;
       }
 
-      // Check self collision
       if (currentSnake.some(segment => segment.x === newHead.x && segment.y === newHead.y)) {
         setGameOver(true);
         return currentSnake;
@@ -62,7 +69,6 @@ const Snake = () => {
 
       const newSnake = [newHead, ...currentSnake];
 
-      // Check food collision
       if (newHead.x === food.x && newHead.y === food.y) {
         setFood(generateFood());
         setScore(s => s + 1);
@@ -110,10 +116,22 @@ const Snake = () => {
 
   return (
     <div className="snake-game">
+      {showTitle && (
+        <div className="game-title" style={{
+          position: 'absolute',
+          zIndex: 1,
+          fontSize: '2rem',
+          color: '#00ff00',
+          textShadow: '0 0 10px #00ff00',
+          animation: 'glow 1.5s ease-in-out infinite alternate'
+        }}>
+          SNAKE
+        </div>
+      )}
       <div className="game-status">
-        <span>Score: {score}</span>
-        {gameOver && <span className="game-over">Game Over!</span>}
-        {isPaused && <span className="paused">Paused</span>}
+        <span>SCORE: {score.toString().padStart(5, '0')}</span>
+        {gameOver && <span className="game-over">GAME OVER!</span>}
+        {isPaused && <span className="paused">PAUSED</span>}
       </div>
       <div 
         className="snake-board"
@@ -129,8 +147,8 @@ const Snake = () => {
             style={{
               left: segment.x * CELL_SIZE,
               top: segment.y * CELL_SIZE,
-              width: CELL_SIZE,
-              height: CELL_SIZE,
+              width: CELL_SIZE - 1,
+              height: CELL_SIZE - 1,
             }}
           />
         ))}
@@ -139,24 +157,24 @@ const Snake = () => {
           style={{
             left: food.x * CELL_SIZE,
             top: food.y * CELL_SIZE,
-            width: CELL_SIZE,
-            height: CELL_SIZE,
+            width: CELL_SIZE - 1,
+            height: CELL_SIZE - 1,
           }}
         />
       </div>
       <div className="controls">
         <button className="reset-button" onClick={resetGame}>
-          {gameOver ? 'Play Again' : 'Reset Game'}
+          {gameOver ? 'PLAY AGAIN' : 'RESET GAME'}
         </button>
         {!gameOver && (
           <button className="pause-button" onClick={() => setIsPaused(p => !p)}>
-            {isPaused ? 'Resume' : 'Pause'}
+            {isPaused ? 'RESUME' : 'PAUSE'}
           </button>
         )}
       </div>
       <div className="instructions">
-        <p>Use arrow keys to move</p>
-        <p>Space to pause</p>
+        <p>← → ↑ ↓ TO MOVE</p>
+        <p>SPACE TO PAUSE</p>
       </div>
     </div>
   );

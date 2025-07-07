@@ -10,19 +10,19 @@ function App() {
   return (
     <div className="App">
       <div className="game">
-        <h1>Game Center</h1>
+        <h1>RETRO ARCADE</h1>
         <div className="game-selector">
           <button 
             className={currentGame === 'tictactoe' ? 'active' : ''} 
             onClick={() => setCurrentGame('tictactoe')}
           >
-            Tic Tac Toe
+            TIC TAC TOE
           </button>
           <button 
             className={currentGame === 'snake' ? 'active' : ''} 
             onClick={() => setCurrentGame('snake')}
           >
-            Snake
+            SNAKE
           </button>
         </div>
         {currentGame === 'tictactoe' ? <TicTacToe /> : <Snake />}
