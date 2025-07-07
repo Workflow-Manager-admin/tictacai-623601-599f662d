@@ -4,6 +4,7 @@ import TicTacToe from './components/TicTacToe';
 import Snake from './components/Snake';
 import SnakeAndLadder from './components/SnakeAndLadder';
 import Chess from './components/Chess';
+import BouncingBall from './components/BouncingBall';
 
 // PUBLIC_INTERFACE
 function App() {
@@ -19,6 +20,8 @@ function App() {
         return <SnakeAndLadder />;
       case 'chess':
         return <Chess />;
+      case 'bouncingball':
+        return <BouncingBall />;
       default:
         return <TicTacToe />;
     }
@@ -52,6 +55,12 @@ function App() {
             onClick={() => setCurrentGame('chess')}
           >
             CHESS
+          </button>
+          <button 
+            className={currentGame === 'bouncingball' ? 'active' : ''} 
+            onClick={() => setCurrentGame('bouncingball')}
+          >
+            BOUNCING BALL
           </button>
         </div>
         {renderGame()}
