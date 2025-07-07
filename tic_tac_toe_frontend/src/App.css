@@ -5,6 +5,8 @@
   --bg-color: #ffffff;
   --text-color: #333333;
   --border-color: #e0e0e0;
+  --snake-color: var(--secondary-color);
+  --food-color: var(--accent-color);
 }
 
 .App {
@@ -114,6 +116,92 @@ h1 {
   opacity: 0.9;
 }
 
+/* Snake Game Styles */
+.snake-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.snake-board {
+  position: relative;
+  background-color: var(--bg-color);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.snake-segment {
+  position: absolute;
+  background-color: var(--snake-color);
+  border-radius: 4px;
+}
+
+.food {
+  position: absolute;
+  background-color: var(--food-color);
+  border-radius: 50%;
+}
+
+.game-status {
+  display: flex;
+  gap: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.game-over {
+  color: #f44336;
+}
+
+.paused {
+  color: var(--accent-color);
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+}
+
+.pause-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: bold;
+}
+
+.instructions {
+  text-align: center;
+  color: var(--text-color);
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+/* Game Selection Styles */
+.game-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.game-selector button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.game-selector button.active {
+  background-color: var(--secondary-color);
+}
+
 @media (max-width: 480px) {
   .square {
     width: 60px;
@@ -122,6 +210,15 @@ h1 {
   }
   
   .mode-selection {
+    flex-direction: column;
+  }
+
+  .snake-board {
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  .game-selector {
     flex-direction: column;
   }
 }
