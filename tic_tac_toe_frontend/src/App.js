@@ -2,10 +2,24 @@ import React, { useState } from 'react';
 import './App.css';
 import TicTacToe from './components/TicTacToe';
 import Snake from './components/Snake';
+import SnakeAndLadder from './components/SnakeAndLadder';
 
 // PUBLIC_INTERFACE
 function App() {
   const [currentGame, setCurrentGame] = useState('tictactoe');
+
+  const renderGame = () => {
+    switch (currentGame) {
+      case 'tictactoe':
+        return <TicTacToe />;
+      case 'snake':
+        return <Snake />;
+      case 'snakeandladder':
+        return <SnakeAndLadder />;
+      default:
+        return <TicTacToe />;
+    }
+  };
 
   return (
     <div className="App">
@@ -24,8 +38,14 @@ function App() {
           >
             SNAKE
           </button>
+          <button 
+            className={currentGame === 'snakeandladder' ? 'active' : ''} 
+            onClick={() => setCurrentGame('snakeandladder')}
+          >
+            SNAKE & LADDER
+          </button>
         </div>
-        {currentGame === 'tictactoe' ? <TicTacToe /> : <Snake />}
+        {renderGame()}
       </div>
     </div>
   );
